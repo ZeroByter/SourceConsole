@@ -1,13 +1,14 @@
 # SourceConsole
 
-
+![20190510202635_1](https://user-images.githubusercontent.com/15838111/57545124-10f52000-7362-11e9-9a44-9deb3a7aaac5.jpg)
+*The source console being used in my game Galactic Lander*
 
 SourceConsole is an in-game developer console asset for Unity.
 It's designed to be compatible with pretty much any sort of game, and most importantly, is designed based on the classic Source engine console.
 
 ## Installation
 
-First, copy the C# scripts from the 'Scripts' folder.
+First, copy the C# scripts from the ['Scripts'](https://github.com/ZeroByter/SourceConsole/tree/master/Assets/SourceConsole/Scripts) folder.
 
 Then, open the 'Just The Console - For Copying' scene and copy the console and paste it in the scene that is first loaded in your game. The console is persistent, and will stick around no matter how many scenes you change.
 
