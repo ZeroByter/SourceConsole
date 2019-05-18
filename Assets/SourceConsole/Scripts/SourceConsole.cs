@@ -68,6 +68,7 @@ namespace SourceConsole
         public string CustomName { get; private set; }
         public string Description { get; private set; }
         public PropertyInfo PropertyInfo { get; set; }
+        public object DefaultValue { get; set; }
 
         public string GetName()
         {
@@ -96,10 +97,11 @@ namespace SourceConsole
             return Description;
         }
 
-        public ConVar(string customName = "", string description = "")
+        public ConVar(string customName = "", string description = "", object defaultValue = null)
         {
             CustomName = customName;
             Description = description;
+            DefaultValue = defaultValue;
         }
     }
 
@@ -200,6 +202,25 @@ namespace SourceConsole
                 {
                     error($"Failed to load convar '{name}'! A command/convar already exists with that name!");
                     throw new DuplicateCommandException($"Failed to load convar '{name}'! A command/convar already exists with that name!");
+                }
+
+                if(convar.DefaultValue != null)
+                {
+                    try
+                    {
+                        convar.PropertyInfo.SetValue(null, convar.DefaultValue);
+                    }
+                    catch (Exception e)
+                    {
+                        if (ShowFullErrorStack)
+                        {
+                            error(e);
+                        }
+                        else
+                        {
+                            error($"{e.GetType().Name}: {e.Message}");
+                        }
+                    }
                 }
 
                 CommandNamesCache.Add(name);
