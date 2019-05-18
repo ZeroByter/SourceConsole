@@ -25,3 +25,7 @@ I found myself commonly binding all sorts of development functions to obscure ke
 ## Other developer consoles
 
 Of course, there are plenty of other developer consoles out there on the GitHub asset store, but none of them quite appealed to me, and so I came up with the idea to copy off the Source engine's console.
+
+## Contributing
+
+Find a bug or something to optimize? Start an issue, or create a pull-request! All help and contribution is of course welcome.
