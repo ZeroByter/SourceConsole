@@ -12,6 +12,10 @@ First, copy the C# scripts from the ['Scripts'](https://github.com/ZeroByter/Sou
 
 Then, open the 'Just The Console - For Copying' scene and copy the console and paste it in the scene that is first loaded in your game. The console is persistent, and will stick around no matter how many scenes you change.
 
+## Requirements
+
+Keep in mind, TextMeshPro is required for the console UI to work. TMPro is *not* included in the release asset package.
+
 ## Examples
 
 There are examples available on how to utilize the console in the 'Examples' folder.
