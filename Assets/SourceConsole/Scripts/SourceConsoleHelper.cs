@@ -155,7 +155,7 @@ namespace SourceConsole
         {
             string str = string.Join(" ", GetArgumentPartsOnly(parts));
 
-            var newPartsArray = str.Split('"')
+            var newPartsArray = str.Split('"', '\'')
                      .Select((element, index) => index % 2 == 0  // If even index
                                            ? element.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)  // Split the item
                                            : new string[] { element })  // Keep the entire item
