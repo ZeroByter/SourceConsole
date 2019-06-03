@@ -50,7 +50,17 @@ namespace SourceConsole.UI
             }
             else
             {
-                parametersString += $": {((ConVar)command).PropertyInfo.PropertyType.Name}";
+                string type;
+                if (((ConVar)command).PropertyInfo != null)
+                {
+                    type = ((ConVar)command).PropertyInfo.PropertyType.Name;
+                }
+                else
+                {
+                    type = ((ConVar)command).FieldInfo.FieldType.Name;
+                }
+
+                parametersString += $": {type}";
             }
 
             commandName.text = $"{command.GetName()} {parametersString}";

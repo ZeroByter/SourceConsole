@@ -1,10 +1,10 @@
 ﻿using SourceConsole.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace SourceConsole
 {
@@ -60,6 +60,7 @@ namespace SourceConsole
 
     public interface IConVarAttribute
     {
+        FieldInfo FieldInfo { get; set; }
         PropertyInfo PropertyInfo { get; set; }
     }
 
@@ -67,14 +68,25 @@ namespace SourceConsole
     {
         public string CustomName { get; private set; }
         public string Description { get; private set; }
+        public FieldInfo FieldInfo { get; set; }
         public PropertyInfo PropertyInfo { get; set; }
         public object DefaultValue { get; set; }
+
+        public MemberInfo GetObjectInfo()
+        {
+            if(FieldInfo != null)
+            {
+                return FieldInfo;
+            }
+
+            return PropertyInfo;
+        }
 
         public string GetName()
         {
             if (CustomName == "")
             {
-                return PropertyInfo.Name.ToLower();
+                return GetObjectInfo().Name.ToLower();
             }
             else
             {
@@ -84,10 +96,11 @@ namespace SourceConsole
 
         public int GetParametersLength()
         {
-            if(PropertyInfo.GetSetMethod(false) != null)
+            if(PropertyInfo != null && PropertyInfo.GetSetMethod(false) != null)
             {
                 return 1;
             }
+            if (FieldInfo != null) return 1;
 
             return 0;
         }
@@ -126,7 +139,7 @@ namespace SourceConsole
         [ConCommand]
         public static void print(object str)
         {
-            ConsolePanelController.print(str.ToString());
+            ConsolePanelController.print(str);
         }
 
         //Ignoring C# name convention to allow for conveniant and fast typing when needing to debug stuff quickly
@@ -208,7 +221,14 @@ namespace SourceConsole
                 {
                     try
                     {
-                        convar.PropertyInfo.SetValue(null, convar.DefaultValue);
+                        if(convar.PropertyInfo != null)
+                        {
+                            convar.PropertyInfo.SetValue(null, convar.DefaultValue);
+                        }
+                        else
+                        {
+                            convar.FieldInfo.SetValue(null, convar.DefaultValue);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -353,7 +373,14 @@ namespace SourceConsole
         {
             if(arg == null)
             {
-                return convar.PropertyInfo.GetMethod.Invoke(null, null);
+                if (convar.PropertyInfo != null)
+                {
+                    return convar.PropertyInfo.GetMethod.Invoke(null, null);
+                }
+                else
+                {
+                    return convar.FieldInfo.GetValue(null);
+                }
             }
             else
             {
@@ -373,7 +400,14 @@ namespace SourceConsole
 
                 try
                 {
-                    convar.PropertyInfo.SetValue(null, singleArg);
+                    if (convar.PropertyInfo != null)
+                    {
+                        convar.PropertyInfo.SetValue(null, singleArg);
+                    }
+                    else
+                    {
+                        convar.FieldInfo.SetValue(null, singleArg);
+                    }
                 }
                 catch (Exception e)
                 {
