@@ -103,6 +103,21 @@ namespace SourceConsole
                 }
             }
 
+            for (int current = 0; current < assemblies.Length; current++)
+            {
+                FieldInfo[] properties = assemblies[current].GetTypes()
+                  .SelectMany(t => t.GetFields())
+                  .Where(m => m.GetCustomAttributes(typeof(AttributeType), true).Length > 0)
+                  .ToArray();
+
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    AttributeType attribute = ExtractAttribute<AttributeType>(properties[i]);
+                    attribute.FieldInfo = properties[i];
+                    result.Add(attribute);
+                }
+            }
+
             return result.ToArray();
         }
 
@@ -132,6 +147,24 @@ namespace SourceConsole
             return default(T);
         }
 
+        public static T ExtractAttribute<T>(FieldInfo method) where T : Attribute
+        {
+            object[] attributes = method.GetCustomAttributes(typeof(T), true);
+            for (int a = 0; a < attributes.Length; a++)
+            {
+                if (attributes[a].GetType() == typeof(T))
+                {
+                    return (T)attributes[a];
+                }
+            }
+            return default(T);
+        }
+
+        /// <summary>
+        /// Given a string of a command, for example 'print "nice meme"', this simply removes the command name, and returns '"nice meme"'
+        /// </summary>
+        /// <param name="parts"></param>
+        /// <returns></returns>
         public static string[] GetArgumentPartsOnly(string[] parts)
         {
             if (parts.Length <= 1) return new string[0]; //if no args
